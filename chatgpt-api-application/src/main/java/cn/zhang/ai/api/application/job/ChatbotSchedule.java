@@ -71,7 +71,7 @@ public class ChatbotSchedule {
             Topics topic = topics.get(0);
             String answer = openAI.doChatGpt(openAiKey, topic.getQuestion().getText().trim());
 
-            boolean status = zsxqApi.anwser(groupId, cookie, topic.getTopic_id(), answer, false);
+            boolean status = zsxqApi.anwser(groupId, cookie, topic.getTopic_id(), answer, true);
             logger.info("编号：{} 问题: {} 状态: {} 回答: {}",topic.getTopic_id(),topic.getQuestion().getText(),status, answer);
 
 

@@ -2,7 +2,7 @@ package cn.zhang.ai.api.domain.ai.model.vo;
 
 public class Choices {
 
-    private String text;
+    private Message message;
 
     private int index;
 
@@ -10,12 +10,12 @@ public class Choices {
 
     private String finish_reason;
 
-    public String getText() {
-        return text;
+    public Message getMessage() {
+        return message;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setMessage(Message message) {
+        this.message = message;
     }
 
     public int getIndex() {

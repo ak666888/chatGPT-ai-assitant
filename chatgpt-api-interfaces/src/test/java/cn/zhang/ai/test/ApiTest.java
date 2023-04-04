@@ -1,5 +1,7 @@
 package cn.zhang.ai.test;
 
+import cn.hutool.json.JSONObject;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -8,6 +10,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Value;
@@ -76,29 +79,26 @@ public class ApiTest {
 
     @Test
     public void test_gpt() throws IOException {
-        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-
-        // 代理地址；open.aiproxy.xyz、open2.aiproxy.xyz
-        HttpPost post = new HttpPost("https://open2.aiproxy.xyz/v1/completions");
-        post.addHeader("Content-Type","application/json");
-        post.addHeader("Authorization","Bearer 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");
-
-        //请求的模型，最长字符串
-        String paramJson = "{\"model\": \"text-davinci-003\", \"prompt\": \"帮我写一个java冒泡排序\", \"temperature\": 0, \"max_tokens\": 1024}";
 
 
-        StringEntity stringEntity = new StringEntity(paramJson, ContentType.create("text/json", "UTF-8"));
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        HttpPost httpPost = new HttpPost("https://open2.aiproxy.xyz/v1/completions");
+        httpPost.setHeader("Content-Type", "application/json");
+        httpPost.setHeader("Authorization", "Bearer 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");
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("model", "gpt-3.5-turbo");
+        requestBody.put("message","[{\"role\": \"user\", \"content\": \"Say this is a test!\"}]");
+        requestBody.put("prompt", "这是prompt");
+        requestBody.put("max_tokens", 256);
+        requestBody.put("temperature", 0.5);
+        httpPost.setEntity(new StringEntity(requestBody.toString()));
+        CloseableHttpResponse response = httpClient.execute(httpPost);
+        HttpEntity responseEntity = response.getEntity();
+        String responseString = responseEntity != null ? EntityUtils.toString(responseEntity) : null;
+        JSONObject jsonResponse = new JSONObject(responseString);
+        //String generatedText = jsonResponse.getJSONArray("choices").getJSONObject(0).getStr("text");
 
-        post.setEntity(stringEntity);
-        CloseableHttpResponse response = httpClient.execute(post);
-
-        if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK){
-            String res = EntityUtils.toString(response.getEntity());
-            System.out.println(res);
-        }else {
-            System.out.println("openaikey: "+ openAiKey);
-            System.out.println(response.getStatusLine().getStatusCode());
-        }
+        System.out.println(jsonResponse);
 
     }
 }
