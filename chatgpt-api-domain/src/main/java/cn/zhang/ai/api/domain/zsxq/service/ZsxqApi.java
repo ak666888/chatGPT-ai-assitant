@@ -72,6 +72,7 @@ public class ZsxqApi implements IzsxqApi {
         post.setEntity(stringEntity);
         CloseableHttpResponse response = httpClient.execute(post);
 
+        System.out.println("这里是回答问题部分");
         if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK){
             String jsonStr = EntityUtils.toString(response.getEntity());
 

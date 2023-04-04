@@ -35,15 +35,14 @@ public class OpenAI implements IOpenAI {
         post.addHeader("Authorization","Bearer "+ openaiKey);
         System.out.println(openaiKey);
         //请求的模型，最长字符串
-        String paramJson = "{\"model\": \"text-davinci-003\", \"prompt\": \"" + question + "\", \"temperature\": 0, \"max_tokens\": 1024}";
+        //便宜：text-davinci-003
+        String paramJson = "{\"model\": \"gpt-3.5-turbo\", \"prompt\": \"" + question + "\", \"temperature\": 0, \"max_tokens\": 1024}";
 
 
         StringEntity stringEntity = new StringEntity(paramJson, ContentType.create("text/json", "UTF-8"));
         post.setEntity(stringEntity);
 
         CloseableHttpResponse response = httpClient.execute(post);
-        String res = EntityUtils.toString(response.getEntity());
-        System.out.println(res);
 
         System.out.println("code: " + response.getStatusLine().getStatusCode());
 
